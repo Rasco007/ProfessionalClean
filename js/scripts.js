@@ -1,5 +1,7 @@
 
 document.addEventListener('DOMContentLoaded', function () {
+    
+   
     var swiper = new Swiper('.swiper-container', {
         loop: true,
         autoplay: {
@@ -20,7 +22,53 @@ document.addEventListener('DOMContentLoaded', function () {
             prevEl: '.swiper-button-prev',
         },
     });
+
+    var btnUpload = $("#upload_file"),
+    btnOuter = $(".button_outer"),
+    btnText = $(".btn_upload");
+
+    btnUpload.on("change", function(e){
+        var ext = btnUpload.val().split('.').pop().toLowerCase();
+    
+        if(ext !== 'pdf') {
+            $(".error_msg").text("Archivo no válido, solo se permiten archivos PDF.");
+    
+            // Limpiar cualquier mensaje anterior de éxito si subes un archivo no válido
+            $("#uploaded_view").html(''); // Limpia el contenedor del mensaje previo
+        } else {
+            $(".error_msg").text(""); // Limpia el mensaje de error si es un archivo válido
+    
+            // Limpiar cualquier mensaje anterior de éxito antes de subir un nuevo archivo válido
+            $("#uploaded_view").html(''); // Limpia el contenedor antes de mostrar el nuevo mensaje
+    
+            // Simular la subida del archivo
+            setTimeout(function(){
+                var uploadedFile = URL.createObjectURL(e.target.files[0]);
+                $("#uploaded_view").html('<p>PDF subido correctamente.</p>').addClass("show");
+            }, 2000);
+        }
+    });
+    
+// Función para eliminar el archivo
+$(".file_remove").on("click", function(e){
+    $("#uploaded_view").removeClass("show");
+    $("#uploaded_view").find("img").remove();
+    
+    // Resetear el estado de las clases
+    btnOuter.removeClass("file_uploading file_uploaded");
+
+    // Resetear el campo de entrada para permitir subir otro archivo
+    btnUpload.val('');  // Esto limpia el valor del input file
+
+    // Restaurar el texto original del botón
+    btnText.text("Subir Archivo");
 });
+
+
+});
+
+
+
 
 window._wpemojiSettings = {
     "baseUrl": "https:\/\/s.w.org\/images\/core\/emoji\/15.0.3\/72x72\/",
